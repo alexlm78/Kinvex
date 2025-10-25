@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: kinvex-postgres
+    environment:
+      POSTGRES_DB: kinvex
+      POSTGRES_USER: kinvex_user
+      POSTGRES_PASSWORD: kinvex_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - kinvex-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: kinvex-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - kinvex-network
+    command: redis-server --appendonly yes
+
+  kinvex-core:
+    build:
+      context: ./KinvexCore
+      dockerfile: Dockerfile
+    container_name: kinvex-core
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: kinvex
+      DB_USERNAME: kinvex_user
+      DB_PASSWORD: kinvex_password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: your-production-secret-key-change-this
+      CORS_ALLOWED_ORIGINS: http://localhost:3000
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - kinvex-network
+    profiles:
+      - full
+
+  kinvex-ui:
+    build:
+      context: ./KinvexUI
+      dockerfile: Dockerfile
+    container_name: kinvex-ui
+    environment:
+      VITE_API_BASE_URL: http://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - kinvex-core
+    networks:
+      - kinvex-network
+    profiles:
+      - full
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  kinvex-network:
+    driver: bridge
