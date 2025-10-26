@@ -28,3 +28,10 @@ logs/
 *.sqlite
 
 # Note: Submodule-specific ignores are handled in their respective .gitignore files
+# Kreaker specific files
+CLAUDE.md
+WARP.md
+.claude
+.kiro
+.trae
+doxs/
