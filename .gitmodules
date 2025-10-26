@@ -1,0 +1,6 @@
+[submodule "KinvexCore"]
+	path = KinvexCore
+	url = https://github.com/alexlm78/KinvexCore.git
+[submodule "KinvexUI"]
+	path = KinvexUI
+	url = https://github.com/alexlm78/KinvexUI.git
