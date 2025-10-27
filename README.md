@@ -1,83 +1,83 @@
-# Sistema de Gestión de Inventario Kinvex
+# Kinvex Inventory Management System
 
-Sistema empresarial de gestión de inventario dividido en dos componentes principales:
-- **KinvexCore**: Backend en Java/Spring Boot (submódulo)
-- **KinvexUI**: Frontend en React/TypeScript (submódulo)
+Enterprise inventory management system divided into two main components:
+- **KinvexCore**: Java/Spring Boot Backend (submodule)
+- **KinvexUI**: React/TypeScript Frontend (submodule)
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
 kinvex-system/
-├── KinvexCore/          # Backend Spring Boot (Git submodule)
-├── KinvexUI/            # Frontend React (Git submodule)
-├── docker-compose.yml   # Orquestación de servicios
+├── KinvexCore/          # Spring Boot Backend (Git submodule)
+├── KinvexUI/            # React Frontend (Git submodule)
+├── docker-compose.yml   # Service orchestration
 └── README.md
 ```
 
-## Clonación del Proyecto
+## Project Cloning
 
-Este proyecto utiliza Git submódulos. Para clonar correctamente:
+This project uses Git submodules. To clone correctly:
 
 ```bash
-# Clonar con submódulos
+# Clone with submodules
 git clone --recursive <repository-url>
 
-# O si ya clonaste el repo principal
+# Or if you already cloned the main repo
 git submodule init
 git submodule update
 ```
 
-## Actualización de Submódulos
+## Submodule Updates
 
 ```bash
-# Actualizar todos los submódulos
+# Update all submodules
 git submodule update --remote
 
-# Actualizar un submódulo específico
+# Update a specific submodule
 git submodule update --remote KinvexCore
 git submodule update --remote KinvexUI
 ```
 
-## Requisitos Previos
+## Prerequisites
 
 - Java 21+
 - Node.js 18+
-- Docker y Docker Compose
-- PostgreSQL 15+ (si no usa Docker)
-- Redis 7+ (si no usa Docker)
+- Docker and Docker Compose
+- PostgreSQL 15+ (if not using Docker)
+- Redis 7+ (if not using Docker)
 
-## Configuración de Desarrollo
+## Development Setup
 
-### Usando Docker Compose (Recomendado)
+### Using Docker Compose (Recommended)
 
-1. **Iniciar solo la base de datos y Redis:**
+1. **Start only database and Redis:**
 ```bash
 docker-compose up postgres redis
 ```
 
-2. **Ejecutar el backend localmente:**
+2. **Run backend locally:**
 ```bash
 cd KinvexCore
 ./gradlew bootRun
 ```
 
-3. **Ejecutar el frontend localmente:**
+3. **Run frontend locally:**
 ```bash
 cd KinvexUI
 npm install
 npm run dev
 ```
 
-### Configuración Manual
+### Manual Setup
 
-1. **Configurar PostgreSQL:**
+1. **Configure PostgreSQL:**
 ```sql
 CREATE DATABASE kinvex;
 CREATE USER kinvex_user WITH PASSWORD 'kinvex_password';
 GRANT ALL PRIVILEGES ON DATABASE kinvex TO kinvex_user;
 ```
 
-2. **Configurar variables de entorno:**
+2. **Set environment variables:**
 ```bash
 export DB_HOST=localhost
 export DB_PORT=5432
@@ -89,98 +89,98 @@ export REDIS_PORT=6379
 export JWT_SECRET=your-secret-key
 ```
 
-## Despliegue Completo con Docker
+## Full Docker Deployment
 
 ```bash
-# Construir y ejecutar todos los servicios
+# Build and run all services
 docker-compose --profile full up --build
 
-# Solo servicios de infraestructura
+# Infrastructure services only
 docker-compose up postgres redis
 ```
 
-## URLs de Acceso
+## Access URLs
 
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8080
 - **Swagger UI**: http://localhost:8080/swagger-ui.html
 - **Actuator**: http://localhost:8080/actuator
 
-## Comandos Útiles
+## Useful Commands
 
 ### Backend (KinvexCore)
 ```bash
-# Ejecutar tests
+# Run tests
 ./gradlew test
 
-# Construir aplicación
+# Build application
 ./gradlew build
 
-# Ejecutar aplicación
+# Run application
 ./gradlew bootRun
 ```
 
 ### Frontend (KinvexUI)
 ```bash
-# Instalar dependencias
+# Install dependencies
 npm install
 
-# Modo desarrollo
+# Development mode
 npm run dev
 
-# Construir para producción
+# Build for production
 npm run build
 
-# Ejecutar tests
+# Run tests
 npm run test
 ```
 
-## Configuración de Variables de Entorno
+## Environment Variables Configuration
 
 ### Backend
-- `DB_HOST`: Host de PostgreSQL (default: localhost)
-- `DB_PORT`: Puerto de PostgreSQL (default: 5432)
-- `DB_NAME`: Nombre de la base de datos (default: kinvex)
-- `DB_USERNAME`: Usuario de la base de datos
-- `DB_PASSWORD`: Contraseña de la base de datos
-- `REDIS_HOST`: Host de Redis (default: localhost)
-- `REDIS_PORT`: Puerto de Redis (default: 6379)
-- `JWT_SECRET`: Clave secreta para JWT
-- `CORS_ALLOWED_ORIGINS`: Orígenes permitidos para CORS
+- `DB_HOST`: PostgreSQL host (default: localhost)
+- `DB_PORT`: PostgreSQL port (default: 5432)
+- `DB_NAME`: Database name (default: kinvex)
+- `DB_USERNAME`: Database user
+- `DB_PASSWORD`: Database password
+- `REDIS_HOST`: Redis host (default: localhost)
+- `REDIS_PORT`: Redis port (default: 6379)
+- `JWT_SECRET`: JWT secret key
+- `CORS_ALLOWED_ORIGINS`: Allowed origins for CORS
 
 ### Frontend
-- `VITE_API_BASE_URL`: URL base del API backend
+- `VITE_API_BASE_URL`: Backend API base URL
 
-## Arquitectura
+## Architecture
 
-El sistema implementa una arquitectura de microservicios con:
-- **Autenticación JWT** con refresh tokens
-- **Base de datos PostgreSQL** para persistencia
-- **Redis** para caché y sesiones
-- **APIs REST** documentadas con OpenAPI
-- **Interfaz React** con Material-UI
+The system implements a microservices architecture with:
+- **JWT Authentication** with refresh tokens
+- **PostgreSQL Database** for persistence
+- **Redis** for caching and sessions
+- **REST APIs** documented with OpenAPI
+- **React Interface** with Material-UI
 
-## Funcionalidades Principales
+## Main Features
 
-1. **Gestión de Productos**: CRUD completo de productos con control de stock
-2. **Integración Externa**: API REST para sistemas de facturación
-3. **Órdenes de Compra**: Gestión completa de órdenes a proveedores
-4. **Reportes**: Generación de reportes en PDF y Excel
-5. **Auditoría**: Registro completo de operaciones
-6. **Dashboard**: Métricas en tiempo real del inventario
+1. **Product Management**: Complete CRUD for products with stock control
+2. **External Integration**: REST API for billing systems
+3. **Purchase Orders**: Complete order management to suppliers
+4. **Reports**: PDF and Excel report generation
+5. **Audit**: Complete operation logging
+6. **Dashboard**: Real-time inventory metrics
 
-## Contribución
+## Contributing
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -am 'Añade nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crea un Pull Request
+1. Fork the project
+2. Create a feature branch (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature/new-feature`)
+5. Create a Pull Request
 
-## Licencia
+## License
 
-Este proyecto está bajo la licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
+This project is under the MIT license. See the [LICENSE](LICENSE) file for more details.
 
-**Desarrollado por [Kreaker.dev](https://kreaker.dev)**
+**Developed by [Kreaker.dev](https://kreaker.dev)**
 
-Al usar este software, debes mantener la atribución al desarrollador original en cualquier distribución o trabajo derivado.
+When using this software, you must maintain attribution to the original developer in any distribution or derivative work.
